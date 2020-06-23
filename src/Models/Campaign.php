@@ -38,7 +38,7 @@ class Campaign extends BaseModel
             ->whereNull('unsubscribed_at')
             ->when(!$this->send_to_all, function (Builder $query) {
                 $query->whereHas('segments', function (Builder $subQuery) {
-                    $subQuery->whereIn('id', $this->segments->pluck('id'));
+                    $subQuery->whereIn('segments.id', $this->segments->pluck('id'));
                 });
             })
             ->count();
@@ -220,7 +220,7 @@ class Campaign extends BaseModel
     }
 
     /**
-     * Whether the campaign has been sent.
+     * Whether the campaign has been queued for sending.
      */
     public function getQueuedAttribute(): bool
     {
